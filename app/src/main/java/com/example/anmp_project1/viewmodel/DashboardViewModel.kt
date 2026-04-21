@@ -15,7 +15,6 @@ class DashboardViewModel(): ViewModel() {
             Habit(3, "Read Books", "Read 5 books every months", 4, 5, "Books", "baseline_book_24", 1, "In Progress"),
             Habit(4, "Meditate", "Meditate for 15 minutes everyday for 5 consecutive days", 1, 5, "Days", "baseline_emoji_people_24", 2, "In Progress"),
         )
-        Log.d("VM DEBUG", "Size: ${habitsLD.value?.size ?: 0}")
     }
 
     override  fun onCleared() {
