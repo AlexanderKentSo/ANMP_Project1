@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.anmp_project1.LoginFragment"
+        android:name="com.example.anmp_project1.view.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.example.anmp_project1.DashboardFragment"
+        android:name="com.example.anmp_project1.view.DashboardFragment"
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard" >
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/createHabitFragment"
-        android:name="com.example.anmp_project1.CreateHabitFragment"
+        android:name="com.example.anmp_project1.view.CreateHabitFragment"
         android:label="fragment_create_habit"
         tools:layout="@layout/fragment_create_habit" >
         <argument
