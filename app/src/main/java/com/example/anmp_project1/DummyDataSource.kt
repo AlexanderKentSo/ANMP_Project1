@@ -23,4 +23,19 @@ object DummyDataSource {
     fun getHabitsByUser(userId: Int): List<Habit> {
         return habits.filter { it.userid == userId }
     }
+
+    fun addHabit(habit: Habit) {
+        habits.add(habit)
+    }
+
+    fun getNextId(): Int {
+        return (habits.maxOfOrNull { it.id } ?: 0) + 1
+    }
+
+    fun updateHabit(habit: Habit) {
+        val index = habits.indexOfFirst { it.id == habit.id }
+        if (index != -1) {
+            habits[index] = habit
+        }
+    }
 }

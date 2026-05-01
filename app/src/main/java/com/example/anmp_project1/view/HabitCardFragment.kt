@@ -1,11 +1,11 @@
 package com.example.anmp_project1.view
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.anmp_project1.R
 import com.example.anmp_project1.databinding.FragmentHabitCardBinding
 
 class HabitCardFragment : Fragment() {
@@ -22,17 +22,14 @@ class HabitCardFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_habit_card, container, false)
+        binding = FragmentHabitCardBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // Inisialisasi tampilan awal
         updateUI()
 
-        // Logika Tombol Tambah (+)
         binding.btnIncrement.setOnClickListener {
             if (currentProgress < maxGoal) {
                 currentProgress++
@@ -40,9 +37,7 @@ class HabitCardFragment : Fragment() {
             }
         }
 
-        // Logika Tombol Kurang (-)
-        binding.
-            btnDecrement.setOnClickListener {
+        binding.btnDecrement.setOnClickListener {
             if (currentProgress > 0) {
                 currentProgress--
                 updateUI()
@@ -51,20 +46,19 @@ class HabitCardFragment : Fragment() {
     }
 
     private fun updateUI(){
-        // 1. Update Teks Progress (misal: "3 / 10 glasses")
-        binding.txtUnitProgress.text = "$currentProgress / $maxGoal units"
+        binding.txtUnitProgress.text = "units"
+        binding.txtCurrentProgress.text = currentProgress.toString()
+        binding.txtTargetProgress.text = maxGoal.toString()
 
-        // 2. Update Progress Bar
         binding.progressBar.max = maxGoal
         binding.progressBar.progress = currentProgress
 
-        // 3. Logika Status (In Progress atau Completed)
         if (currentProgress >= maxGoal) {
             binding.btnStatus.text = "Completed"
-            // Opsional: ganti warna status jika diajarkan (contoh ke hijau)
-            // binding.txtStatus.setTextColor(Color.GREEN)
+            binding.btnStatus.setTextColor(Color.parseColor("#4CAF50"))
         } else {
             binding.btnStatus.text = "In Progress"
+            binding.btnStatus.setTextColor(Color.parseColor("#FF9800"))
         }
     }
 }
