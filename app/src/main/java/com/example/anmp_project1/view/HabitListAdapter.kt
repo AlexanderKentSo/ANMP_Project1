@@ -7,10 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.anmp_project1.databinding.FragmentHabitCardBinding
 import com.example.anmp_project1.model.Habit
 
-class HabitListAdapter(val habitList:ArrayList<Habit>,
-                       val incrementListener: (Int) -> Unit,
-                       val decrementListener: (Int) -> Unit
-): RecyclerView.Adapter<HabitListAdapter.HabitViewHolder>() {
+class HabitListAdapter(val habitList:ArrayList<Habit>): RecyclerView.Adapter<HabitListAdapter.HabitViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitViewHolder {
         val binding = FragmentHabitCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -48,11 +45,13 @@ class HabitListAdapter(val habitList:ArrayList<Habit>,
         }
 
         holder.binding.btnIncrement.setOnClickListener {
-            incrementListener(habit.id)
+            habit.increment()
+            notifyItemChanged(position)
         }
 
         holder.binding.btnDecrement.setOnClickListener {
-            decrementListener(habit.id)
+            habit.decrement()
+            notifyItemChanged(position)
         }
     }
 

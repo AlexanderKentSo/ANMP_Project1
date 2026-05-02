@@ -68,8 +68,7 @@ class CreateHabitFragment : Fragment() {
                     target = goal.toInt(),
                     unit = unit,
                     icon = selectedIcon,
-                    userid = userId,
-                    status = "In Progress"
+                    userid = userId
                 )
 
                 DummyDataSource.addHabit(newHabit)

@@ -36,15 +36,7 @@ class DashboardFragment : Fragment() {
         viewModel.userId = user_id
         viewModel.refresh()
 
-        habitListAdapter = HabitListAdapter(
-            arrayListOf(),
-            incrementListener = { habitId ->
-                viewModel.incrementProgress(habitId)
-            },
-            decrementListener = { habitId ->
-                viewModel.decrementProgress(habitId)
-            }
-        )
+        habitListAdapter = HabitListAdapter(arrayListOf())
 
         binding.recViewHabit.layoutManager = LinearLayoutManager(context)
         binding.recViewHabit.adapter = habitListAdapter
