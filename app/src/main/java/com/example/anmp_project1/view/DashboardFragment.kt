@@ -14,7 +14,7 @@ import com.example.anmp_project1.viewmodel.DashboardViewModel
 
 class DashboardFragment : Fragment() {
     private lateinit var viewModel: DashboardViewModel
-    private val habitListAdapter = HabitListAdapter(arrayListOf())
+    private lateinit var habitListAdapter: HabitListAdapter
     private lateinit var binding: FragmentDashboardBinding;
     private var user_id: Int = 0
 
@@ -33,7 +33,18 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProvider(this).get(DashboardViewModel::class.java)
+        viewModel.userId = user_id
         viewModel.refresh()
+
+        habitListAdapter = HabitListAdapter(
+            arrayListOf(),
+            incrementListener = { habitId ->
+                viewModel.incrementProgress(habitId)
+            },
+            decrementListener = { habitId ->
+                viewModel.decrementProgress(habitId)
+            }
+        )
 
         binding.recViewHabit.layoutManager = LinearLayoutManager(context)
         binding.recViewHabit.adapter = habitListAdapter
@@ -44,6 +55,11 @@ class DashboardFragment : Fragment() {
         }
 
         observeViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
     }
 
     fun observeViewModel() {
