@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.example.anmp_project1.databinding.FragmentLoginBinding
 import com.example.anmp_project1.viewmodel.LoginViewModel
 
@@ -27,10 +28,14 @@ class LoginFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
         binding.txtError.visibility = View.GONE
         binding.btnLogin.setOnClickListener{
-            var user = viewModel.login(binding.txtUsername.text.toString(), binding.txtPassword.text.toString())
+            val name = binding.txtUsername.text.toString()
+            val password = binding.txtPassword.text.toString()
+            viewModel.login(name, password)
+        }
+        viewModel.userLD.observe(viewLifecycleOwner) { user ->
             if(user != null){
                 val action = LoginFragmentDirections.actionDashboardFragent(user.id)
-                it.findNavController().navigate(action)
+                findNavController().navigate(action)
             } else {
                 binding.txtError.visibility = View.VISIBLE
             }
