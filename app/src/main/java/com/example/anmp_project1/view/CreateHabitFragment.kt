@@ -7,13 +7,13 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.navigation.findNavController
-import com.example.anmp_project1.DummyDataSource
 import com.example.anmp_project1.databinding.FragmentCreateHabitBinding
+import com.example.anmp_project1.model.AppDatabase
 import com.example.anmp_project1.model.Habit
 import com.google.android.material.snackbar.Snackbar
 
 class CreateHabitFragment : Fragment() {
-    private lateinit var binding: FragmentCreateHabitBinding;
+    private lateinit var binding: FragmentCreateHabitBinding
 
     private val iconOptions = listOf(
         "baseline_water_drop_24",
@@ -44,6 +44,8 @@ class CreateHabitFragment : Fragment() {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerInputIcon.adapter = adapter
 
+        val habitDao = AppDatabase.getDatabase(requireContext()).habitDao()
+
         binding.btnCreateHabit.setOnClickListener {
             val title = binding.txtInputTitle.text.toString()
             val description = binding.txtInputDescription.text.toString()
@@ -61,7 +63,7 @@ class CreateHabitFragment : Fragment() {
                 val selectedIcon = iconOptions[selectedIconIndex]
 
                 val newHabit = Habit(
-                    id = DummyDataSource.getNextId(),
+                    id = 0,
                     title = title,
                     description = description,
                     current = 0,
@@ -72,11 +74,10 @@ class CreateHabitFragment : Fragment() {
                     status = "In Progress"
                 )
 
-                DummyDataSource.addHabit(newHabit)
+                habitDao.insertHabit(newHabit)
                 Snackbar.make(view, "Habit created successfully!", Snackbar.LENGTH_SHORT).show()
                 it.findNavController().popBackStack()
             }
         }
-
     }
 }

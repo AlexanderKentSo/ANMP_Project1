@@ -1,15 +1,20 @@
 package com.example.anmp_project1.view
 
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.anmp_project1.databinding.FragmentHabitCardBinding
 import com.example.anmp_project1.model.Habit
 
-class HabitListAdapter(val habitList:ArrayList<Habit>,
-                       val incrementListener: (Int) -> Unit,
-                       val decrementListener: (Int) -> Unit
+interface HabitCardListener {
+    fun onIncrement(habitId: Int)
+    fun onDecrement(habitId: Int)
+    fun onTitleClicked(habitId: Int)
+}
+
+class HabitListAdapter(
+    val habitList: ArrayList<Habit>,
+    val listener: HabitCardListener
 ): RecyclerView.Adapter<HabitListAdapter.HabitViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HabitViewHolder {
@@ -19,23 +24,8 @@ class HabitListAdapter(val habitList:ArrayList<Habit>,
 
     override fun onBindViewHolder(holder: HabitViewHolder, position: Int){
         val habit = habitList[position]
-
-        holder.binding.txtTitle.text = habit.title
-        holder.binding.txtDescription.text = habit.description
-        holder.binding.txtCurrentProgress.text = habit.current.toString()
-        holder.binding.txtTargetProgress.text = habit.target.toString()
-        holder.binding.txtUnitProgress.text = habit.unit
-
-        holder.binding.progressBar.max = habit.target
-        holder.binding.progressBar.progress = habit.current
-
-        if (habit.current >= habit.target) {
-            holder.binding.btnStatus.text = "Completed"
-            holder.binding.btnStatus.setTextColor(Color.parseColor("#4CAF50"))
-        } else {
-            holder.binding.btnStatus.text = "In Progress"
-            holder.binding.btnStatus.setTextColor(Color.parseColor("#FF9800"))
-        }
+        holder.binding.habit = habit
+        holder.binding.listener = listener
 
         val context = holder.itemView.context
         val resId = context.resources.getIdentifier(
@@ -46,19 +36,11 @@ class HabitListAdapter(val habitList:ArrayList<Habit>,
         if (resId != 0) {
             holder.binding.imgIcon.setImageResource(resId)
         }
-
-        holder.binding.btnIncrement.setOnClickListener {
-            incrementListener(habit.id)
-        }
-
-        holder.binding.btnDecrement.setOnClickListener {
-            decrementListener(habit.id)
-        }
     }
 
     override fun getItemCount(): Int = habitList.size
 
-    fun updateHabitList(newHabitList:ArrayList<Habit>){
+    fun updateHabitList(newHabitList: ArrayList<Habit>){
         habitList.clear()
         habitList.addAll(newHabitList)
         notifyDataSetChanged()

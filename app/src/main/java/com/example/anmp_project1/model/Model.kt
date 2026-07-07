@@ -1,7 +1,12 @@
 package com.example.anmp_project1.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "habit")
 data class Habit(
-    var id: Int,
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0,
     var title: String,
     var description: String,
     var current: Int,
@@ -12,8 +17,10 @@ data class Habit(
     var status: String
 )
 
+@Entity(tableName = "user")
 data class User(
-    var id: Int,
+    @PrimaryKey(autoGenerate = true)
+    var id: Int = 0,
     var name: String,
     var password: String
 )

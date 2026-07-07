@@ -1,16 +1,19 @@
 package com.example.anmp_project1.viewmodel
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import com.example.anmp_project1.DummyDataSource
+import com.example.anmp_project1.model.AppDatabase
 import com.example.anmp_project1.model.Habit
 
-class DashboardViewModel(): ViewModel() {
+class DashboardViewModel(application: Application): AndroidViewModel(application) {
     val habitsLD = MutableLiveData<ArrayList<Habit>>()
     var userId: Int = 0
 
+    private val habitDao = AppDatabase.getDatabase(application).habitDao()
+
     fun refresh(){
-        val list = DummyDataSource.getHabitsByUser(userId)
+        val list = habitDao.getHabitsByUser(userId)
         habitsLD.value = ArrayList(list)
     }
 
@@ -22,8 +25,8 @@ class DashboardViewModel(): ViewModel() {
             if (habit.current >= habit.target) {
                 habit.status = "Completed"
             }
-            DummyDataSource.updateHabit(habit)
-            habitsLD.value = currentList
+            habitDao.updateHabit(habit)
+            refresh()
         }
     }
 
@@ -33,12 +36,12 @@ class DashboardViewModel(): ViewModel() {
         if (habit.current > 0) {
             habit.current--
             habit.status = "In Progress"
-            DummyDataSource.updateHabit(habit)
-            habitsLD.value = currentList
+            habitDao.updateHabit(habit)
+            refresh()
         }
     }
 
-    override  fun onCleared() {
+    override fun onCleared() {
         super.onCleared()
     }
 }

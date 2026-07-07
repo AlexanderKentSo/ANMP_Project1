@@ -12,10 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.anmp_project1.databinding.FragmentDashboardBinding
 import com.example.anmp_project1.viewmodel.DashboardViewModel
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : Fragment(), HabitCardListener {
     private lateinit var viewModel: DashboardViewModel
     private lateinit var habitListAdapter: HabitListAdapter
-    private lateinit var binding: FragmentDashboardBinding;
+    private lateinit var binding: FragmentDashboardBinding
     private var user_id: Int = 0
 
     override fun onCreateView(
@@ -38,12 +38,7 @@ class DashboardFragment : Fragment() {
 
         habitListAdapter = HabitListAdapter(
             arrayListOf(),
-            incrementListener = { habitId ->
-                viewModel.incrementProgress(habitId)
-            },
-            decrementListener = { habitId ->
-                viewModel.decrementProgress(habitId)
-            }
+            this
         )
 
         binding.recViewHabit.layoutManager = LinearLayoutManager(context)
@@ -55,6 +50,19 @@ class DashboardFragment : Fragment() {
         }
 
         observeViewModel()
+    }
+
+    override fun onIncrement(habitId: Int) {
+        viewModel.incrementProgress(habitId)
+    }
+
+    override fun onDecrement(habitId: Int) {
+        viewModel.decrementProgress(habitId)
+    }
+
+    override fun onTitleClicked(habitId: Int) {
+        val action = DashboardFragmentDirections.actionEditHabitFragment(habitId)
+        view?.findNavController()?.navigate(action)
     }
 
     override fun onResume() {

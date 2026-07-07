@@ -25,10 +25,20 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
+        
+        val sessionManager = com.example.anmp_project1.SessionManager(requireContext())
+        val savedUserId = sessionManager.getUserId()
+        if (savedUserId != -1) {
+            val action = LoginFragmentDirections.actionDashboardFragent(savedUserId)
+            view.findNavController().navigate(action)
+            return
+        }
+
         binding.txtError.visibility = View.GONE
         binding.btnLogin.setOnClickListener{
             var user = viewModel.login(binding.txtUsername.text.toString(), binding.txtPassword.text.toString())
             if(user != null){
+                sessionManager.saveUserId(user.id)
                 val action = LoginFragmentDirections.actionDashboardFragent(user.id)
                 it.findNavController().navigate(action)
             } else {
