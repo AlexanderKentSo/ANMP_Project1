@@ -4,8 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.anmp_project1.model.User
-import com.example.anmp_project1.model.UserDao
+import com.example.anmp_project1.model.Habit
 import com.example.anmp_project1.util.buildDb
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,22 +12,31 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 
-class LoginViewModel(application: Application): AndroidViewModel(application), CoroutineScope {
-    val userLD = MutableLiveData<User>()
+class HabitDetailViewModel(application: Application): AndroidViewModel(application), CoroutineScope {
+    val habitLD = MutableLiveData<Habit>()
     private val job = Job()
 
     override val coroutineContext: CoroutineContext
         get() = job + Dispatchers.IO
 
-    fun login(name: String, password: String) {
+    fun fetch(id: Int) {
         launch {
             val db = buildDb(getApplication())
-            userLD.postValue(db.userDao().login(name, password))
+            habitLD.postValue(db.habitDao().showId(id))
         }
     }
 
-    override fun onCleared() {
-        super.onCleared()
-        job.cancel()
+    fun insert(habit: Habit){
+        launch{
+            val db = buildDb(getApplication())
+            db.habitDao().insert(habit)
+        }
+    }
+
+    fun update(habit: Habit){
+        launch {
+            val db = buildDb(getApplication())
+            db.habitDao().update(habit)
+        }
     }
 }
