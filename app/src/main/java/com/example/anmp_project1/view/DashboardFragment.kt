@@ -49,30 +49,6 @@ class DashboardFragment : Fragment(), HabitItemListener {
         observeViewModel()
     }
 
-    override fun onIncrement(habitId: Int) {
-        viewModel.incrementProgress(habitId)
-    }
-
-    override fun onDecrement(habitId: Int) {
-        viewModel.decrementProgress(habitId)
-    }
-
-    override fun onTitleClicked(habitId: Int) {
-        val action = DashboardFragmentDirections.actionEditHabitFragment(habitId)
-        view?.findNavController()?.navigate(action)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.refresh()
-    }
-
-    fun observeViewModel() {
-        viewModel.habitsLD.observe(viewLifecycleOwner, Observer {
-            habitListAdapter.updateHabitList(it)
-        })
-    }
-
     override fun onDecrement(habit: Habit) {
         if(habit.current > 0) {
             habit.current--
@@ -92,5 +68,16 @@ class DashboardFragment : Fragment(), HabitItemListener {
     override fun onTitleClick(view:View, habit: Habit) {
         val action = DashboardFragmentDirections.actionEditHabitFragment(habit.id)
         view.findNavController().navigate(action)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.refresh()
+    }
+
+    fun observeViewModel() {
+        viewModel.habitsLD.observe(viewLifecycleOwner, Observer {
+            habitListAdapter.updateHabitList(it)
+        })
     }
 }

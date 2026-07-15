@@ -26,8 +26,6 @@ class DashboardViewModel(application: Application): AndroidViewModel(application
         }
     }
 
-    private val habitDao = AppDatabase.getDatabase(application).habitDao()
-
     fun refresh(){
         launch {
             val db = buildDb(getApplication())

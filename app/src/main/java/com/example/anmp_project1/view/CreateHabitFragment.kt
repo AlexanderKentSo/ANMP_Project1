@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import com.example.anmp_project1.databinding.FragmentCreateHabitBinding
-import com.example.anmp_project1.model.AppDatabase
 import com.example.anmp_project1.model.Habit
 import com.example.anmp_project1.model.IconOption
 import com.example.anmp_project1.viewmodel.HabitDetailViewModel
@@ -38,8 +37,6 @@ class CreateHabitFragment : Fragment(), HabitEditListener {
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, Habit.iconOptions)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         binding.spinnerInputIcon.adapter = adapter
-
-        val habitDao = AppDatabase.getDatabase(requireContext()).habitDao()
 
         binding.btnCreateHabit.setOnClickListener {
             val selectedOption = binding.spinnerInputIcon.selectedItem as IconOption

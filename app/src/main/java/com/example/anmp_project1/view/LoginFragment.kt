@@ -30,7 +30,7 @@ class LoginFragment : Fragment() {
         val sessionManager = com.example.anmp_project1.SessionManager(requireContext())
         val savedUserId = sessionManager.getUserId()
         if (savedUserId != -1) {
-            val action = LoginFragmentDirections.actionDashboardFragent(savedUserId)
+            val action = LoginFragmentDirections.actionDashboardFragment(savedUserId)
             view.findNavController().navigate(action)
             return
         }
@@ -44,7 +44,7 @@ class LoginFragment : Fragment() {
         viewModel.userLD.observe(viewLifecycleOwner) { user ->
             if(user != null){
                 sessionManager.saveUserId(user.id)
-                val action = LoginFragmentDirections.actionDashboardFragent(user.id)
+                val action = LoginFragmentDirections.actionDashboardFragment(user.id)
                 findNavController().navigate(action)
             } else {
                 binding.txtError.visibility = View.VISIBLE

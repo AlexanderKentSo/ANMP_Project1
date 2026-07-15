@@ -11,8 +11,10 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/actionDashboardFragent"
-            app:destination="@id/dashboardFragment" />
+            android:id="@+id/actionDashboardFragment"
+            app:destination="@id/dashboardFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
     <fragment
         android:id="@+id/dashboardFragment"
@@ -22,9 +24,6 @@
         <action
             android:id="@+id/actionCreateHabitFragment"
             app:destination="@id/createHabitFragment" />
-        <action
-            android:id="@+id/actionEditHabitFragment"
-            app:destination="@id/editHabitFragment" />
         <argument
             android:name="user_id"
             app:argType="integer" />
