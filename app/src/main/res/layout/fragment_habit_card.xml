@@ -4,18 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable
-            name="habit"
-            type="com.example.anmp_project1.model.Habit" />
-        <variable
-            name="listener"
-            type="com.example.anmp_project1.view.HabitCardListener" />
+        <import type="android.graphics.Color" />
+        <variable name="habit" type="com.example.anmp_project1.model.Habit"/>
+        <variable name="listener" type="com.example.anmp_project1.view.HabitItemListener"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        tools:context=".view.HabitCardFragment">
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
@@ -38,7 +36,7 @@
                     android:layout_height="72dp"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
-                    android:src="@drawable/baseline_water_drop_24"
+                    app:imageResource="@{context.resources.getIdentifier(habit.icon, `drawable`, context.packageName)}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -49,22 +47,27 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:text="@{habit.title}"
-                    android:onClick="@{() -> listener.onTitleClicked(habit.id)}"
+                    android:onClick="@{(v) -> listener.onTitleClick(v, habit)}"
                     android:textSize="16sp"
                     app:layout_constraintStart_toEndOf="@+id/imgIcon"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/txtDescription"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
                     android:text="@{habit.description}"
-                    android:textSize="8sp"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toTopOf="@+id/progressBar"
+                    app:layout_constraintEnd_toStartOf="@+id/btnStatus"
+                    app:layout_constraintHorizontal_bias="0.0"
                     app:layout_constraintStart_toEndOf="@+id/imgIcon"
-                    app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+                    app:layout_constraintTop_toBottomOf="@+id/txtTitle"
+                    app:layout_constraintVertical_bias="0.404" />
 
                 <Button
                     android:id="@+id/btnStatus"
@@ -73,8 +76,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="60dp"
                     android:layout_marginEnd="16dp"
-                    android:text="@{habit.status}"
-                    android:textColor="@{habit.status.equals(`Completed`) ? @color/design_default_color_primary : @color/design_default_color_secondary}"
+                    android:text="@{(habit.current >= habit.target)? `Completed` : `In Progress`}"
+                    android:textColor="@{(habit.current >= habit.target)? Color.parseColor(`#4CAF50`) : Color.parseColor(`#FF9800`)}"
                     app:layout_constraintBottom_toTopOf="@+id/progressBar"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
@@ -89,8 +92,8 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
-                    android:max="@{habit.target}"
                     android:progress="@{habit.current}"
+                    android:max="@{habit.target}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/imgIcon" />
@@ -102,9 +105,9 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
+                    android:onClick="@{() -> listener.onDecrement(habit)}"
                     android:text="-"
                     android:textSize="24sp"
-                    android:onClick="@{() -> listener.onDecrement(habit.id)}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/btnIncrement"
                     app:layout_constraintTop_toBottomOf="@+id/progressBar"
@@ -117,9 +120,9 @@
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
                     android:layout_marginBottom="16dp"
+                    android:onClick="@{() -> listener.onIncrement(habit)}"
                     android:text="+"
                     android:textSize="24sp"
-                    android:onClick="@{() -> listener.onIncrement(habit.id)}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/progressBar"
@@ -132,6 +135,10 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:text="@{String.valueOf(habit.current)}"
+                    android:onClick="@{(v) -> listener.onTitleClick(v, habit)}"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?android:attr/selectableItemBackground"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/progressBar" />
 

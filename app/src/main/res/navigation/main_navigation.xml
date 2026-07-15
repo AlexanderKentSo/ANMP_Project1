@@ -28,6 +28,9 @@
         <argument
             android:name="user_id"
             app:argType="integer" />
+        <action
+            android:id="@+id/actionEditHabitFragment"
+            app:destination="@id/editFragmentFragment" />
     </fragment>
     <fragment
         android:id="@+id/createHabitFragment"
@@ -39,12 +42,11 @@
             app:argType="integer" />
     </fragment>
     <fragment
-        android:id="@+id/editHabitFragment"
+        android:id="@+id/editFragmentFragment"
         android:name="com.example.anmp_project1.view.EditHabitFragment"
-        android:label="fragment_edit_habit"
-        tools:layout="@layout/fragment_edit_habit" >
+        android:label="editFragmentFragment" >
         <argument
-            android:name="habitId"
+            android:name="habit_id"
             app:argType="integer" />
     </fragment>
 </navigation>

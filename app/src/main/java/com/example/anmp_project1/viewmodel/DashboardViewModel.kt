@@ -3,45 +3,35 @@ package com.example.anmp_project1.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
-import com.example.anmp_project1.model.AppDatabase
 import com.example.anmp_project1.model.Habit
+import com.example.anmp_project1.util.buildDb
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import kotlin.coroutines.CoroutineContext
 
-class DashboardViewModel(application: Application): AndroidViewModel(application) {
-    val habitsLD = MutableLiveData<ArrayList<Habit>>()
+class DashboardViewModel(application: Application): AndroidViewModel(application), CoroutineScope {
+    val habitsLD = MutableLiveData<List<Habit>>()
     var userId: Int = 0
+    private var job = Job()
+
+    override val coroutineContext: CoroutineContext
+        get() = job + Dispatchers.IO
+
+    fun update(habit: Habit) {
+        launch {
+            val db = buildDb(getApplication())
+            db.habitDao().update(habit)
+        }
+    }
 
     private val habitDao = AppDatabase.getDatabase(application).habitDao()
 
     fun refresh(){
-        val list = habitDao.getHabitsByUser(userId)
-        habitsLD.value = ArrayList(list)
-    }
-
-    fun incrementProgress(habitId: Int) {
-        val currentList = habitsLD.value ?: return
-        val habit = currentList.find { it.id == habitId } ?: return
-        if (habit.current < habit.target) {
-            habit.current++
-            if (habit.current >= habit.target) {
-                habit.status = "Completed"
-            }
-            habitDao.updateHabit(habit)
-            refresh()
+        launch {
+            val db = buildDb(getApplication())
+            habitsLD.postValue(db.habitDao().showUser(userId))
         }
-    }
-
-    fun decrementProgress(habitId: Int) {
-        val currentList = habitsLD.value ?: return
-        val habit = currentList.find { it.id == habitId } ?: return
-        if (habit.current > 0) {
-            habit.current--
-            habit.status = "In Progress"
-            habitDao.updateHabit(habit)
-            refresh()
-        }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
     }
 }
